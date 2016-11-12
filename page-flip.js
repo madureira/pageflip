@@ -16,10 +16,12 @@ var Pageflip = (function(fn) {
     this.rightHiddenPage = 2;
 
     var _this = this;
+    this._el(mainElement).element.innerHTML = `
+      <div id="page-flip"><span class='page-flip-loader'></span></div>
+    `;
     this.preloadPages(function() {
       _this.preloadAudio();
       _this.buildMarkup(mainElement);
-      _this._el('.page-left').addClass('disable-click');
       _this.renderPages();
       _this.addClickOnGrabbers();
     });
@@ -27,18 +29,13 @@ var Pageflip = (function(fn) {
 
   fn.prototype.preloadPages = function(callback) {
     var _this = this,
-        images = [],
-        loaded = 0,
-        i = 0;
+    images    = [],
+    loaded    = 0;
 
-    for (i; i < this.pages.length; i++) {
-
+    for (var i = 0; i < this.pages.length; i++) {
       images[i] = new Image();
       images[i].onload = function() {
-        loaded++;
-        if (loaded === _this.pages.length) {
-          callback();
-        }
+        if (++loaded === _this.pages.length) callback();
       };
       images[i].src = _this.pages[i];
     }
@@ -111,16 +108,15 @@ var Pageflip = (function(fn) {
     var _this     = this,
     $leftGrabber  = this._el('.page-left .page-grabber').element,
     $rightGrabber = this._el('.page-right .page-grabber').element;
-
     $leftGrabber.addEventListener('click', function() { _this.leftGrabberOnClick() }, false);
     $rightGrabber.addEventListener('click', function() { _this.rightGrabberOnClick() }, false);
+    this._el('.page-left').addClass('disable-click');
   };
 
   fn.prototype.leftGrabberOnClick = function() {
     if (!this.hasPrevPage && !this.isTurningPage) return;
 
     this.audio.play();
-
     this.isTurningPage = true;
 
     var _this       = this,
@@ -150,7 +146,6 @@ var Pageflip = (function(fn) {
     if (!this.hasNextPage && !this.isTurningPage) return;
 
     this.audio.play();
-
     this.isTurningPage = true;
 
     var _this        = this,
@@ -197,28 +192,26 @@ var Pageflip = (function(fn) {
   };
 
   fn.prototype.buildMarkup = function(mainElement) {
-    this._el(mainElement).element.innerHTML = `
-      <div id="page-flip">
-        <div class="pages-container">
-          <div class="hidden-left-page"></div>
-          <div class="left-brightness"></div>
-          <div class="prev-page"></div>
-          <div class="page-left">
-            <div class="page-grabber">
-              <div class="page-fold"></div>
-            </div>
-            <div class="page-middle"></div>
+    this._el('#page-flip').element.innerHTML = `
+      <div class="pages-container">
+        <div class="hidden-left-page"></div>
+        <div class="left-brightness"></div>
+        <div class="prev-page"></div>
+        <div class="page-left">
+          <div class="page-grabber">
+            <div class="page-fold"></div>
           </div>
-          <div class="page-right">
-            <div class="page-middle"></div>
-            <div class="page-grabber">
-              <div class="page-fold"></div>
-            </div>
-          </div>
-          <div class="next-page"></div>
-          <div class="right-brightness"></div>
-          <div class="hidden-right-page"></div>
+          <div class="page-middle"></div>
         </div>
+        <div class="page-right">
+          <div class="page-middle"></div>
+          <div class="page-grabber">
+            <div class="page-fold"></div>
+          </div>
+        </div>
+        <div class="next-page"></div>
+        <div class="right-brightness"></div>
+        <div class="hidden-right-page"></div>
       </div>
     `;
   };
