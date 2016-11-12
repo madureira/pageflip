@@ -3,6 +3,7 @@ var Pageflip = (function(fn) {
 
   fn = function(mainElement, pages) {
     this.pages = pages;
+    this.audioUrl = 'page-flip.mp3';
     this.transitionMs = 500;
     this.hasPrevPage = false;
     this.hasNextPage = true;
@@ -16,6 +17,7 @@ var Pageflip = (function(fn) {
 
     var _this = this;
     this.preloadPages(function() {
+      _this.preloadAudio();
       _this.buildMarkup(mainElement);
       _this._el('.page-left').addClass('disable-click');
       _this.renderPages();
@@ -24,15 +26,28 @@ var Pageflip = (function(fn) {
   };
 
   fn.prototype.preloadPages = function(callback) {
-    var _this = this, images = [], i = 0;
+    var _this = this,
+        images = [],
+        loaded = 0,
+        i = 0;
 
     for (i; i < this.pages.length; i++) {
+
       images[i] = new Image();
       images[i].onload = function() {
-        if (images.length === _this.pages.length) callback();
+        loaded++;
+        if (loaded === _this.pages.length) {
+          callback();
+        }
       };
       images[i].src = _this.pages[i];
     }
+  };
+
+  fn.prototype.preloadAudio = function() {
+    this.audio = new Audio();
+    this.audio.preload = 'auto';
+    this.audio.src = this.audioUrl;
   };
 
   fn.prototype.organizePages = function(direction) {
@@ -104,6 +119,8 @@ var Pageflip = (function(fn) {
   fn.prototype.leftGrabberOnClick = function() {
     if (!this.hasPrevPage && !this.isTurningPage) return;
 
+    this.audio.play();
+
     this.isTurningPage = true;
 
     var _this       = this,
@@ -125,12 +142,14 @@ var Pageflip = (function(fn) {
       $hiddenLeftPage.removeClass('show-hidden-left-page');
       $pageGrabber.removeClass('hide-page-fold');
       _this._el('.page-left').removeClass('reduce-to-left');
-      _this.isTurningPage = false;
+      _this.reset();
     });
   };
 
   fn.prototype.rightGrabberOnClick = function() {
     if (!this.hasNextPage && !this.isTurningPage) return;
+
+    this.audio.play();
 
     this.isTurningPage = true;
 
@@ -153,7 +172,7 @@ var Pageflip = (function(fn) {
       $hiddenRightPage.removeClass('show-hidden-right-page');
       $pageGrabber.removeClass('hide-page-fold');
       _this._el('.page-right').removeClass('reduce-to-right');
-      _this.isTurningPage = false;
+      _this.reset();
     });
   };
 
@@ -169,6 +188,12 @@ var Pageflip = (function(fn) {
     } else {
       this._el(selector).element.style.backgroundImage = null;
     }
+  };
+
+  fn.prototype.reset = function() {
+    this.audio.pause();
+    this.audio.currentTime = 0;
+    this.isTurningPage = false;
   };
 
   fn.prototype.buildMarkup = function(mainElement) {
