@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>page-flip</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel='stylesheet' href='page-flip.css'>
+    <style>
+      html, body {
+        width: 100%;
+        height: 100%;
+      }
+
+      body {
+        overflow: hidden;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 0;
+        margin: 0;
+        background: #74ebd5;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #ACB6E5, #74ebd5);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #ACB6E5, #74ebd5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+      }
+
+      #container {
+        position: absolute;
+        top: 10%;
+        left: 25%;
+        width: 50%;
+      }
+
+      #magazine {
+        width: 100%;
+        height: 100%;
+        margin: 0 auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <div id="magazine"></div>
+    </div>
+    <script src="page-flip.js"></script>
+    <script>
+      new Pageflip('#magazine', [
+        'pages/page_001.jpg',
+        'pages/page_002.jpg',
+        'pages/page_003.jpg',
+        'pages/page_004.jpg',
+        'pages/page_005.jpg',
+        'pages/page_006.jpg',
+        'pages/page_007.jpg',
+        'pages/page_008.jpg'
+      ]);
+    </script>
+  </body>
+</html>

@@ -19,6 +19,7 @@ var Pageflip = (function(fn) {
     this._el(mainElement).element.innerHTML = `
       <div id="page-flip"><span class='page-flip-loader'></span></div>
     `;
+    
     this.preloadPages(function() {
       _this.preloadAudio();
       _this.buildMarkup(mainElement);
