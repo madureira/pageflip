@@ -1,7 +1,7 @@
 # pageflip
 This is a CSS3 and JavaScript library that creates a digital magazine using all the advantages of HTML5.
 
-**[Live Demo](http://pageflip.madureira.me/)**
+**[Live Demo](https://madureira.github.io/pageflip/)**
 
 ## How to use
 You just need to include the css:
